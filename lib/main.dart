@@ -30,11 +30,11 @@ class _MyTodoAppState extends State<MyTodoApp> {
   Color btnColor = const Color(0xffff955b);
   Color editorColor = const Color(0xff4044cc);
 
-  // getTask() async {
-  //   final tasks = await DBProvider.dataBase.getTask();
-  //   print(tasks);
-  //   return tasks;
-  // }
+  getTask() async {
+    final tasks = await DBProvider.dataBase.getTask();
+    print(tasks);
+    return tasks;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,32 +47,40 @@ class _MyTodoAppState extends State<MyTodoApp> {
       backgroundColor: mainColor,
       body: Column(
         children: [
-          // Expanded(
-          //   child: FutureBuilder(
-          //     future: getTask(),
-          //     builder: (_, taskData) {
-          //       switch (taskData.connectionState) {
-          //         case ConnectionState.waiting:
-          //           {
-          //             return const Center(child: CircularProgressIndicator());
-          //           }
-          //         case ConnectionState.done:
-          //           {
-          //             // return const Padding(
-          //             //   padding: EdgeInsets.all(8.0),
-          //             //   child: ListView.builder(
-          //             //     itemCount: taskData.data.length,
-          //             //     itemBuilder: (context, index) {
-          //             //       String task = taskData.data[index]["task"];
-          //             //       String day = DateTime.parse(taskData.data[index]['creationData']);
-          //             //     },
-          //             //   ),
-          //             // );
-          //           }
-          //       }
-          //     },
-          //   ),
-          // ),
+          Expanded(
+            child: FutureBuilder(
+              future: getTask(),
+              builder: (_, taskData) {
+                switch (taskData.connectionState) {
+                  case ConnectionState.waiting:
+                    {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  case ConnectionState.done:
+                    {
+                      if(taskData.data != Null){
+                        return const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: ListView.builder(
+                            itemCount: taskData.data.length,
+                            itemBuilder: (context, index) {
+                              String task = taskData.data[index]["task"].toString();
+                              String day = DateTime.parse(taskData.data[index]['creationDate'])
+                                  .day
+                                  .toString();
+                            },
+                          ),
+                        );
+                      }else{
+                        return Center(
+                          child: Text("You have now Task today"),
+                        )
+                      }
+                    }
+                }
+              },
+            ),
+          ),
           Container(
             padding:
                 const EdgeInsets.symmetric(horizontal: 12.0, vertical: 18.0),

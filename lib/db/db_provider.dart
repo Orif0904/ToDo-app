@@ -22,7 +22,7 @@ class DBProvider {
       join(await getDatabasesPath(), "todo_app_db.db"),
       onCreate: (db, version) async{
         await db.execute('''
-        Create table tasks (id integer primary key )
+        Create table tasks (id INTEGER PRIMARY KEY AUTOINCREMENT, task TEXT, creationDate TEXT)
         ''');
       },
       version: 1
